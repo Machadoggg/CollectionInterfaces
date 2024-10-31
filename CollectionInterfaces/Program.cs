@@ -84,3 +84,74 @@ foreach (var numero in numeros2)
 {
     Console.WriteLine(numero);
 }
+
+
+
+//4.IQueryable
+//Propósito:
+//Extiende IEnumerable y se utiliza para realizar consultas a colecciones 
+//que admiten operaciones de transformación y proyección, especialmente en bases 
+//de datos y otros almacenes de datos.
+//Espacio de nombres:
+//System.Linq
+//Métodos importantes:
+//Provider:
+//Obtiene el proveedor de consultas que traduce la consulta LINQ a una consulta 
+//específica (como SQL para bases de datos).
+//Expression:
+//Obtiene la expresión de consulta, que se puede modificar o transformar.
+//Características:
+//- Utiliza evaluación diferida, pero en lugar de en memoria, ejecuta consultas en el origen 
+//  de datos.
+//- Permite escribir consultas complejas que pueden ser traducidas a SQL o a otras consultas 
+//  en almacenes de datos externos.
+//- Solo se evalúa cuando se accede a los datos (por ejemplo, con ToList o FirstOrDefault).
+//Uso común:
+//Ideal para aplicaciones con Entity Framework o consultas a bases de datos, 
+//donde se necesita eficiencia y evitar cargar todos los datos en memoria.
+
+//IQueryable<Usuario> usuarioss = dbContext.Usuarios.Where(u => u.Activo);
+//IQueryable<Usuario> usuarioss = dbContext.Usuarios.Where(u => u.Activo);
+//var usuariosActivos = usuarioss.ToList(); // Ejecuta la consulta en la base de datos
+
+// Lista de usuarios simulada
+List<Usuario> usuarios = new List<Usuario>
+        {
+            new Usuario { Id = 1, Nombre = "Juan", Activo = true },
+            new Usuario { Id = 2, Nombre = "Ana", Activo = false },
+            new Usuario { Id = 3, Nombre = "Carlos", Activo = true },
+            new Usuario { Id = 4, Nombre = "Lucia", Activo = false },
+            new Usuario { Id = 5, Nombre = "María", Activo = true }
+        };
+
+
+// Convertir la lista en IQueryable
+IQueryable<Usuario> usuariosQuery = usuarios.AsQueryable();
+
+// Consulta LINQ usando IQueryable para obtener solo los usuarios activos
+IQueryable<Usuario> usuariosActivos = usuariosQuery.Where(u => u.Activo);
+
+// Ejecutar la consulta (evaluación diferida)
+List<Usuario> resultado = usuariosActivos.ToList();
+
+// Mostrar resultados
+Console.WriteLine("Usuarios Activos:");
+
+foreach (var usuario in resultado)
+{
+    Console.WriteLine($"Id: {usuario.Id}, Nombre: {usuario.Nombre}");
+}
+
+public class Usuario
+{
+    public int Id { get; set; }
+    public string Nombre { get; set; } = default!;
+    public bool Activo { get; set; }
+}
+
+
+
+
+
+
+
